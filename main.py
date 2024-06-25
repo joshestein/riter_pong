@@ -80,8 +80,6 @@ def on_press(key):
 def main():
     render()
 
-    # riter_thread = Thread(target=rite, args=(leds,), daemon=True)
-    # riter_thread.start()
     with keyboard.Listener(on_press=on_press) as listener:
         while listener.is_alive():
             rite(leds)
