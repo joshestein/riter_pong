@@ -21,6 +21,12 @@ class Ball:
         self.dx = dx
         self.dy = dy
 
+    def _reset(self):
+        self.x = WIDTH // 2
+        self.y = HEIGHT // 2
+        self.dx *= -1
+        self.dy *= -1
+
     def move(self):
         leds[self.y * WIDTH + self.x] = "0"
 
@@ -29,6 +35,19 @@ class Ball:
 
         if self.x == 0 or self.x == WIDTH - 1:
             self.dx *= -1
+
+        if self.x == 1 and left_start <= self.y < left_start + paddle_length:
+            self.dx *= -1
+        elif (
+            self.x == WIDTH - 2 and right_start <= self.y < right_start + paddle_length
+        ):
+            self.dx *= -1
+        elif self.x == 1:
+            # TODO: increment right player score
+            self._reset()
+        elif self.x == WIDTH - 2:
+            # TODO: increment right player score
+            self._reset()
 
         self.x += self.dx
         self.y += self.dy
