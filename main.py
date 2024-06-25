@@ -27,7 +27,19 @@ def rite(leds):
 def render():
     global left_start, right_start, leds
 
+    # TODO: only reset what has been changed
     leds = [str(0) for i in range(WIDTH * HEIGHT)]
+
+    # Handle out of bounds
+    if left_start < 0:
+        left_start = 0
+    elif left_start + paddle_length > HEIGHT:
+        left_start = HEIGHT - paddle_length
+
+    if right_start < 0:
+        right_start = 0
+    elif right_start + paddle_length > HEIGHT:
+        right_start = HEIGHT - paddle_length
 
     for i in range(HEIGHT):
         for j in range(WIDTH):
