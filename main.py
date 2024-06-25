@@ -4,6 +4,8 @@ from pynput import keyboard
 from pynput.keyboard import Key
 from pythonosc import udp_client
 
+from ball import Ball
+
 WIDTH = 96
 HEIGHT = 38
 
@@ -12,52 +14,6 @@ right_start = 10
 paddle_length = 5
 
 leds = [str(0) for i in range(WIDTH * HEIGHT)]
-
-
-class Ball:
-    def __init__(self, x, y, dx, dy):
-        self.x = x
-        self.y = y
-        self.dx = dx
-        self.dy = dy
-
-    def _reset(self):
-        self.x = WIDTH // 2
-        self.y = HEIGHT // 2
-        self.dx *= -1
-        self.dy *= -1
-
-    def move(self):
-        leds[self.y * WIDTH + self.x] = "0"
-
-        if self.y == 0 or self.y == HEIGHT - 1:
-            self.dy *= -1
-
-        if self.x == 0 or self.x == WIDTH - 1:
-            self.dx *= -1
-
-        if self.x == 1 and left_start <= self.y < left_start + paddle_length:
-            self.dx *= -1
-        elif (
-            self.x == WIDTH - 2 and right_start <= self.y < right_start + paddle_length
-        ):
-            self.dx *= -1
-        elif self.x == 1:
-            # TODO: increment right player score
-            self._reset()
-        elif self.x == WIDTH - 2:
-            # TODO: increment right player score
-            self._reset()
-
-        self.x += self.dx
-        self.y += self.dy
-
-        self.render()
-
-    def render(self):
-        global leds
-        print(self.y * WIDTH + self.x)
-        leds[self.y * WIDTH + self.x] = "1"
 
 
 def rite(leds):
@@ -124,14 +80,15 @@ def on_press(key):
 
 
 def main():
-    ball = Ball(WIDTH // 2, HEIGHT // 2, 1, 1)
+    global leds, left_start, right_start, paddle_length
+    ball = Ball(WIDTH, HEIGHT, 1, 1)
     render()
 
     with keyboard.Listener(on_press=on_press) as listener:
         while listener.is_alive():
-            ball.move()
+            ball.move(leds, left_start, right_start, paddle_length)
             rite(leds)
-            time.sleep(0.1)
+            time.sleep(0.08)
         listener.join()
 
 
