@@ -1,3 +1,5 @@
+import time
+
 from pynput import keyboard
 from pynput.keyboard import Key
 from pythonosc import udp_client
@@ -10,6 +12,33 @@ right_start = 10
 paddle_length = 5
 
 leds = [str(0) for i in range(WIDTH * HEIGHT)]
+
+
+class Ball:
+    def __init__(self, x, y, dx, dy):
+        self.x = x
+        self.y = y
+        self.dx = dx
+        self.dy = dy
+
+    def move(self):
+        leds[self.y * WIDTH + self.x] = "0"
+
+        if self.y == 0 or self.y == HEIGHT - 1:
+            self.dy *= -1
+
+        if self.x == 0 or self.x == WIDTH - 1:
+            self.dx *= -1
+
+        self.x += self.dx
+        self.y += self.dy
+
+        self.render()
+
+    def render(self):
+        global leds
+        print(self.y * WIDTH + self.x)
+        leds[self.y * WIDTH + self.x] = "1"
 
 
 def rite(leds):
@@ -76,11 +105,14 @@ def on_press(key):
 
 
 def main():
+    ball = Ball(WIDTH // 2, HEIGHT // 2, 1, 1)
     render()
 
     with keyboard.Listener(on_press=on_press) as listener:
         while listener.is_alive():
+            ball.move()
             rite(leds)
+            time.sleep(0.1)
         listener.join()
 
 
