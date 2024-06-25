@@ -41,13 +41,11 @@ def render():
     elif right_start + paddle_length > HEIGHT:
         right_start = HEIGHT - paddle_length
 
-    for i in range(HEIGHT):
-        for j in range(WIDTH):
-            if left_start < i < left_start + paddle_length:
-                leds[i * WIDTH] = "1"
+    for i in range(left_start, left_start + paddle_length):
+        leds[i * WIDTH] = "1"
 
-            if right_start < i < right_start + paddle_length:
-                leds[(i + 1) * WIDTH - 1] = "1"
+    for i in range(right_start, right_start + paddle_length):
+        leds[(i + 1) * WIDTH - 1] = "1"
 
 
 def on_press(key):
