@@ -7,7 +7,7 @@ class Ball:
         self.x = width // 2
         self.y = height // 2
 
-    def _reset(self):
+    def reset(self):
         self.x = self.width // 2
         self.y = self.height // 2
         self.dx *= -1
@@ -26,12 +26,6 @@ class Ball:
             and right_start <= self.y < right_start + paddle_length
         ):
             self.dx *= -1
-        elif self.x == 1:
-            # TODO: increment right player score
-            self._reset()
-        elif self.x == self.width - 2:
-            # TODO: increment right player score
-            self._reset()
 
         self.x += self.dx
         self.y += self.dy

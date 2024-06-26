@@ -14,6 +14,7 @@ left_start = 5
 right_start = 10
 
 leds = [str(0) for i in range(WIDTH * HEIGHT)]
+scores = [0, 0]
 
 
 def rite(leds):
@@ -87,8 +88,17 @@ def main():
     with keyboard.Listener(on_press=on_press) as listener:
         while listener.is_alive():
             ball.move(leds, left_start, right_start, PADDLE_LENGTH)
+
+            if ball.x == 0:
+                scores[1] += 1
+                ball.reset()
+            elif ball.x == WIDTH - 1:
+                scores[0] += 1
+                ball.reset()
+
             rite(leds)
             time.sleep(0.08)
+
         listener.join()
 
 
