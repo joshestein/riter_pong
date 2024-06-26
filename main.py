@@ -8,10 +8,10 @@ from ball import Ball
 
 WIDTH = 96
 HEIGHT = 38
+PADDLE_LENGTH = 5
 
 left_start = 5
 right_start = 10
-paddle_length = 5
 
 leds = [str(0) for i in range(WIDTH * HEIGHT)]
 
@@ -37,18 +37,18 @@ def render():
     # Handle out of bounds
     if left_start < 0:
         left_start = 0
-    elif left_start + paddle_length > HEIGHT:
-        left_start = HEIGHT - paddle_length
+    elif left_start + PADDLE_LENGTH > HEIGHT:
+        left_start = HEIGHT - PADDLE_LENGTH
 
     if right_start < 0:
         right_start = 0
-    elif right_start + paddle_length > HEIGHT:
-        right_start = HEIGHT - paddle_length
+    elif right_start + PADDLE_LENGTH > HEIGHT:
+        right_start = HEIGHT - PADDLE_LENGTH
 
-    for i in range(left_start, left_start + paddle_length):
+    for i in range(left_start, left_start + PADDLE_LENGTH):
         leds[i * WIDTH] = "1"
 
-    for i in range(right_start, right_start + paddle_length):
+    for i in range(right_start, right_start + PADDLE_LENGTH):
         leds[(i + 1) * WIDTH - 1] = "1"
 
 
@@ -80,13 +80,13 @@ def on_press(key):
 
 
 def main():
-    global leds, left_start, right_start, paddle_length
+    global leds, left_start, right_start
     ball = Ball(WIDTH, HEIGHT, 1, 1)
     render()
 
     with keyboard.Listener(on_press=on_press) as listener:
         while listener.is_alive():
-            ball.move(leds, left_start, right_start, paddle_length)
+            ball.move(leds, left_start, right_start, PADDLE_LENGTH)
             rite(leds)
             time.sleep(0.08)
         listener.join()
