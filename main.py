@@ -32,9 +32,6 @@ def rite(leds):
 def render():
     global left_start, right_start, leds
 
-    # TODO: only reset what has been changed
-    leds = [str(0) for i in range(WIDTH * HEIGHT)]
-
     # Handle out of bounds
     if left_start < 0:
         left_start = 0
@@ -58,26 +55,48 @@ def on_press(key):
 
     try:
         if key.char == "w":
-            left_start -= 1
-            render()
+            move_left_paddle_up()
         elif key.char == "s":
-            left_start += 1
-            render()
-        elif key.char == "j":
-            right_start += 1
-            render()
+            move_left_paddle_down()
         elif key.char == "k":
-            right_start -= 1
-            render()
+            move_right_paddle_up()
+        elif key.char == "j":
+            move_right_paddle_down()
     except AttributeError:
         if key == Key.down:
-            right_start += 1
-            render()
+            move_right_paddle_down()
         elif key == Key.up:
-            right_start -= 1
-            render()
+            move_right_paddle_up()
         elif key == Key.esc:
             return False
+
+
+def move_left_paddle_up():
+    global left_start
+    leds[(left_start + PADDLE_LENGTH - 1) * WIDTH] = str(0)
+    left_start -= 1
+    render()
+
+
+def move_left_paddle_down():
+    global left_start
+    leds[left_start * WIDTH] = str(0)
+    left_start += 1
+    render()
+
+
+def move_right_paddle_up():
+    global right_start
+    leds[(right_start + PADDLE_LENGTH) * WIDTH - 1] = str(0)
+    right_start -= 1
+    render()
+
+
+def move_right_paddle_down():
+    global right_start
+    leds[(right_start + 1) * WIDTH - 1] = str(0)
+    right_start += 1
+    render()
 
 
 def main():
